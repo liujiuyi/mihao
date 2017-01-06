@@ -1,0 +1,80 @@
+<!-- #BeginLibraryItem "/library/user_header.lbi" --><!-- #EndLibraryItem --> 
+<div id="mbMain">
+	<section class="modBaseBox" style="background-color:white;padding:10px;margin-bottom:10px;">
+    	<div class="modBd">
+        	<div class="userCenterInfoBox">
+            	<div class="userHead" style="border:0px;">{if $info.headimgurl}<img src="{$info.headimgurl}" style="width:5em;height:5em">{else}<i class="glyphicon glyphicon-user"></i>{/if}</div>
+                <dl class="userInfo">
+                	<dt>{$info.username}</dt>
+                  <dd></dd>
+                  <dd>您是会员编号是:{$user_id}号</dd>
+                </dl>
+            </div>
+        </div>
+    </section>
+    <section class="userCenterSubBox modTop">
+    	<ul>
+        	<li class="order">
+            	<a href="{:url('user/order_list')}">
+                	<div class="iconfont icon"></div>
+					{$lang.order_list_lnk}
+                </a>
+            </li>
+            <li class="pickup">
+            	<a href="{:url('user/not_pay_order_list')}">
+                	<div class="iconfont icon"></div>
+					{$lang.not_pay_list}
+                </a>
+            </li>
+        </ul>
+        <ul>
+        	<li class="coupon">
+            	<a href="{:url('user/bonus')}">
+                	<div class="iconfont icon"></div>
+					{$lang.label_bonus}
+                </a>
+            </li>
+            <li class="browse">
+            	<a href="{:url('user/booking_list')}">
+                	<div class="iconfont icon"></div>
+                    {$lang.label_booking}
+                </a>
+            </li>
+        </ul>
+        <div class="loginOut">
+        	<a href="{:url('user/logout')}" class="modBtnWhite modBtnWidth">{$lang.label_logout}</a>
+        </div>
+    </section>
+</div>
+<!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem --> 
+<script type="text/javascript">
+    $(function(){
+        $(".del").click(function(){
+            if(!confirm('您确定要删除吗？')){
+                return false;
+            }
+            var obj = $(this);
+            var url = obj.attr("href");
+            $.get(url, '', function(data){
+                if(1 == data.status){
+                    if(obj.hasClass("history_clear")){
+                        obj.closest(".ect-pro-list").html("<p class='text-center  ect-margin-tb ect-padding-tb'>暂无浏览记录，点击<a href={:url('category/index')} class='ect-color ect-margin-lr' style='font-size:1.3em;'>进入</a>浏览商品</p>");
+                        obj.parent().siblings("ul").remove();
+                    } 
+                    else{
+                        if(obj.closest("li").siblings("li").length == 0){
+                            obj.closest("ul").html("<p class='text-center  ect-margin-tb ect-padding-tb'>{$lang.no_data}</p>");
+                        }
+                        obj.closest("li").remove();
+                    }
+                }
+                else{
+                    alert("删除失败");
+                }
+            }, 'json');
+            return false;
+   		});
+    })
+</script> 
+</body>
+</html>
