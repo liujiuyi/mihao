@@ -1043,8 +1043,7 @@ class FlowController extends CommonController {
                 $consignee ['district']
             )),
             'mobile_order' => 1,
-            'mobile_pay' => 1,
-            'best_time' => trim($_POST ['shipping_date_submit'])
+            'mobile_pay' => 1
         );
 
         /* 扩展信息 */
@@ -1115,7 +1114,8 @@ class FlowController extends CommonController {
         foreach ($consignee as $key => $value) {
             $order [$key] = addslashes($value);
         }
-
+        $order['best_time'] = local_strtotime($_POST ['shipping_date_submit']);
+        
         /* 判断是不是实体商品 */
         foreach ($cart_goods as $val) {
             /* 统计实体商品的个数 */

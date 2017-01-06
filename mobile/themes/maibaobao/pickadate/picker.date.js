@@ -1283,7 +1283,7 @@ DatePicker.defaults = (function( prefix ) {
 
         // The format to show on the `input` element
 		format: 'yyyy 年 mm 月 dd 日',
-		formatSubmit: 'yyyy/mm/dd',
+		formatSubmit: 'yyyy-mm-dd',
 
         // Classes
         klass: {

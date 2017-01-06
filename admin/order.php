@@ -236,6 +236,7 @@ elseif ($_REQUEST['act'] == 'info')
     }
 
     /* 其他处理 */
+    $order['best_time']    = local_date($_CFG['time_format'], $order['best_time']);
     $order['order_time']    = local_date($_CFG['time_format'], $order['add_time']);
     $order['pay_time']      = $order['pay_time'] > 0 ?
         local_date($_CFG['time_format'], $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
@@ -2646,6 +2647,7 @@ elseif ($_REQUEST['act'] == 'operate')
         $order['region'] = $db->getOne($sql);
 
         /* 查询：其他处理 */
+        $order['best_time']    = local_date($_CFG['time_format'], $order['best_time']);
         $order['order_time']    = local_date($_CFG['time_format'], $order['add_time']);
         $order['invoice_no']    = $order['shipping_status'] == SS_UNSHIPPED || $order['shipping_status'] == SS_PREPARING ? $_LANG['ss'][SS_UNSHIPPED] : $order['invoice_no'];
 
@@ -2999,6 +3001,7 @@ elseif ($_REQUEST['act'] == 'operate')
             $order['region'] = $db->getOne($sql);
 
             /* 其他处理 */
+            $order['best_time']    = local_date($_CFG['time_format'], $order['best_time']);
             $order['order_time']    = local_date($_CFG['time_format'], $order['add_time']);
             $order['pay_time']      = $order['pay_time'] > 0 ?
                 local_date($_CFG['time_format'], $order['pay_time']) : $_LANG['ps'][PS_UNPAYED];
