@@ -17,6 +17,9 @@
         <a href="{$hot_goods.url}"><img src="{$hot_goods.goods_img}" alt="{$hot_goods.name}" width="100%"></a>
         </div>
         <div class="info">
+            <p class="name">
+              <a href="{$goods.url}">{$hot_goods.name}</a>
+            </p>
             <p class="price">
                 <span><!--{if $hot_goods.promote_price}-->{$hot_goods.promote_price}<!--{else}-->{$hot_goods.shop_price}<!--{/if}--></span>
             </p>
