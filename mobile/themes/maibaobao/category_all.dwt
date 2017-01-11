@@ -41,21 +41,9 @@
 						</a>
 					</li>
                     <li>
-						<a href="index.php?c=category&a=top_all">
-							<span class="iconfont"></span>
-							类目
-						</a>
-					</li>
-                    <li>
 						<a href="index.php?m=default&c=user">
 							<span class="iconfont"></span>
 							我的
-						</a>
-					</li>
-                    <li>
-						<a href="javascript:openSearch();">
-							<span class="iconfont"></span>
-							搜索
 						</a>
 					</li>
                 </ul>
@@ -95,7 +83,7 @@
             <!--{/if}-->
             <!--{/foreach}--></h5>
             </div>
-            <i class="fa fa-angle-right ect-transition05"></i>
+            <i class="fa fa-angle-right ect-transition05"  style="float: right;"></i>
         </div></a>
         <!--{/if}-->
         <div class="ect-category-child">
@@ -110,5 +98,13 @@
 </div>
 </div>
 <!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
+<script type="text/javascript">
+    $(function(){
+      $('.J-link-more').on('click', function () {
+        $('.J-top-links').toggleClass("toggle-show");
+        return false;
+      });
+    })
+  </script>
 </body>
 </html>

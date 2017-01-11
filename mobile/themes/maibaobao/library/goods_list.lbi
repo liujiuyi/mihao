@@ -1,5 +1,5 @@
-<section class="filter">
-	<form method="GET" class="sort" name="listform">
+<section class="filter" style="display: none;">
+	<form method="GET" class="sort" name="listform" >
     	<ul>
         	<li>
             	<a class="{if $sort =='sales_volume' && $order == 'DESC'}ect-colory select{elseif $sort =='sales_volume' && $order == 'ASC'}ect-colory{/if}" href="{:url('category/index#goods_list',array('id'=>$this->_var['id'],'display'=>$this->_var['display'],'brand'=>$this->_var['brand_id'],'price_min'=>$this->_var['price_min'],'price_max'=>$this->_var['price_max'],'filter_attr'=>$this->_var['filter_attr'], 'sort'=>'sales_volume', 'order'=> ($this->_var['sort']=='sales_volume' && $this->_var['order']=='ASC')?'DESC':'ASC', 'keywords'=>$this->_var['keywords']))}">{$lang.sort_sales} <i></i></a>
@@ -21,21 +21,28 @@
     <a href="javascript:;" class="get_more"></a>
 </section>
 <!--{else}-->
-<section class="products-list">
+<section class="products-list" style="padding-top:.2em;">
+  <hr style="color: #dfdfdf;clear: both;height: 0;margin:0;">
 	<!--{foreach name=goods_list from=$goods_list item=goods}-->
-	<div class="product">
-    	<div class="pic">
-        	<a href="{$goods.url}"><img src="{$goods.goods_thumb}" alt="{$goods.name}" width="100%" /></a>
+	<div class="product" style="width:100%;padding:.5rem;" onclick="location.href='{$goods.url}';">
+    	<div class="pic" style="width:40%;float:left;">
+        	<img src="{$goods.original_img}" alt="{$goods.name}" width="100%"/>
         </div>
-        <div class="info">
-        	<p class="name">
-            	<a href="{$goods.url}">{$goods.name}</a>
-            </p>
-            <p class="price">
-            	<span><!--{if $goods.promote_price}-->{$goods.promote_price}<!--{else}-->{$goods.shop_price}<!--{/if}--></span>
-            </p>
+        <div class="info" style="width:55%;float:right;text-align: left;padding:0">
+        	<p class="name" style="width:65%;float: left;">
+          	<a href="{$goods.url}">{$goods.name}</a>
+          </p>
+          <p class="price" style="width:35%;float: right;text-align: right;">
+          	<span><!--{if $goods.promote_price}-->{$goods.promote_price}<!--{else}-->{$goods.shop_price}<!--{/if}--></span>
+          </p>
+          <!-- {if $goods.bonus_money} 红包-->
+          <p style="width:100%;float: right;background: #fef8ec;text-align: right;margin-top:1rem;">
+            <span style="color: #c7154a;padding-right:.3rem;">赠送:{$goods.bonus_name}</span>
+          </p>
+          <!-- {/if} -->
         </div>
     </div>
+    <hr style="color: #dfdfdf;clear: both;height: 0;margin:0">
     <!--{/foreach}--> 
 </section>
 {include file='library/page.lbi '}

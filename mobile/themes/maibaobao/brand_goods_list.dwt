@@ -39,21 +39,9 @@
 						</a>
 					</li>
                     <li>
-						<a href="index.php?c=category&a=top_all">
-							<span class="iconfont"></span>
-							类目
-						</a>
-					</li>
-                    <li>
 						<a href="index.php?m=default&c=user">
 							<span class="iconfont"></span>
 							我的
-						</a>
-					</li>
-                    <li>
-						<a href="javascript:openSearch();">
-							<span class="iconfont"></span>
-							搜索
 						</a>
 					</li>
                 </ul>

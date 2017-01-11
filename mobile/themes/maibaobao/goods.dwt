@@ -91,7 +91,7 @@
         <!-- {/if} -->
         <!-- {if $goods.bonus_money} 红包-->
         <div class="b-2">
-                                     购买此商品可获得 <strong class="c-red">{$goods.bonus_money}{$goods.bonus_name}</strong>
+                                    赠送: <strong class="c-red">{$goods.bonus_name}</strong>
         </div>
         <!-- {/if} -->
     </section>

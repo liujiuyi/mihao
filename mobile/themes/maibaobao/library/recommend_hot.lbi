@@ -11,21 +11,28 @@
 <!-- {else} -->
 <!--{if $hot_goods}-->
 <div class="products-list" id="">
-    <!-- {foreach name=hot_goods from=$hot_goods item=hot_goods} -->
-    <div class="product single_item">
-       <div class="pic">
-        <a href="{$hot_goods.url}"><img src="{$hot_goods.goods_img}" alt="{$hot_goods.name}" width="100%"></a>
+    <hr style="color: #dfdfdf;clear: both;height: 0;margin:0;">
+    <!--{foreach name=hot_goods from=$hot_goods item=hot_goods}-->
+    <div class="product" style="width:100%;padding:.5rem;" onclick="location.href='{$hot_goods.url}';">
+      <div class="pic" style="width:40%;float:left;">
+          <img src="{$hot_goods.original_img}" alt="{$hot_goods.name}" width="100%"/>
         </div>
-        <div class="info">
-            <p class="name">
-              <a href="{$goods.url}">{$hot_goods.name}</a>
-            </p>
-            <p class="price">
-                <span><!--{if $hot_goods.promote_price}-->{$hot_goods.promote_price}<!--{else}-->{$hot_goods.shop_price}<!--{/if}--></span>
-            </p>
-        </div> 
+        <div class="info" style="width:55%;float:right;text-align: left;padding:0">
+          <p class="name" style="width:65%;float: left;">
+            <a href="{$hot_goods.url}">{$hot_goods.name}</a>
+          </p>
+          <p class="price" style="width:35%;float: right;text-align: right;">
+            <span><!--{if $hot_goods.promote_price}-->{$hot_goods.promote_price}<!--{else}-->{$hot_goods.shop_price}<!--{/if}--></span>
+          </p>
+          <!-- {if $hot_goods.bonus_money} 红包-->
+          <p style="width:100%;float: right;background: #fef8ec;text-align: right;margin-top:1rem;">
+            <span style="color: #c7154a;padding-right:.3rem;">赠送:{$hot_goods.bonus_name}</span>
+          </p>
+          <!-- {/if} -->
+        </div>
     </div>
-    <!-- {/foreach}-->
+    <hr style="color: #dfdfdf;clear: both;height: 0;margin:0">
+    <!--{/foreach}-->
     <div class="clearfix"></div>
     <div class="see-more" id="see-all-pic"><span class="more-loading"><a href="{:url('category/index');}">点击查看更多</a></span></div>
 </div>

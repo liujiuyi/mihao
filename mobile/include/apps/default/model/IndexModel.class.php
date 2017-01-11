@@ -31,8 +31,12 @@ class IndexModel extends CommonModel {
         } else {
             $type = 'g.is_best = 1';
         }
+        $time = gmtime();
         // 取出所有符合条件的商品数据，并将结果存入对应的推荐类型数组中
-        $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.shop_price AS org_price, g.promote_price, ' . "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " . "promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb, g.goods_img, RAND() AS rnd " . 'FROM ' . $this->pre . 'goods AS g ' . "LEFT JOIN " . $this->pre . "member_price AS mp " . "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ";
+        $sql = 'SELECT g.goods_id, g.goods_name, g.goods_name_style, g.market_price, g.shop_price AS org_price, g.promote_price, ' . "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, " . "promote_start_date, promote_end_date, g.goods_brief, g.goods_thumb, g.goods_img, g.original_img, RAND() AS rnd, m.type_name AS bonus_name, m.type_money AS bonus_money  "; 
+        $sql .= ' FROM ' . $this->pre . 'goods AS g ' . 
+        " LEFT JOIN " . $this->pre . "member_price AS mp " . "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
+        " LEFT JOIN " . $this->pre . "bonus_type AS m " . "ON g.bonus_type_id = m.type_id AND m.send_start_date <= '$time' AND m.send_end_date >= '$time'";
         $sql .= ' WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0 AND ' . $type;
         $sql .= ' ORDER BY g.sort_order, g.last_update DESC limit ' . $start . ', ' . $limit;
 
@@ -54,10 +58,13 @@ class IndexModel extends CommonModel {
             $goods[$key]['shop_price'] = price_format($vo['shop_price']);
             $goods[$key]['thumb'] = get_image_path($vo['goods_id'], $vo['goods_thumb'], true);
             $goods[$key]['goods_img'] = get_image_path($vo['goods_id'], $vo['goods_img']);
+            $goods[$key]['original_img'] = get_image_path($vo['goods_id'], $vo['original_img']);
             $goods[$key]['url'] = url('goods/index', array('id' => $vo['goods_id']));
             $goods[$key]['sales_count'] = model('GoodsBase')->get_sales_count($vo['goods_id']);
             $goods[$key]['sc'] = model('GoodsBase')->get_goods_collect($vo['goods_id']);
             $goods[$key]['mysc'] = 0;
+            $goods[$key]['bonus_name'] = $vo['bonus_name'];
+            $goods[$key]['bonus_money'] = $vo['bonus_money'];
             // 检查是否已经存在于用户的收藏夹
             if ($_SESSION ['user_id']) {
                 // 用户自己有没有收藏过
