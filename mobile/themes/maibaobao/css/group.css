@@ -36,7 +36,7 @@
 	background-color:#fff
 }
 .tabs .selected .title {
-	color:#c6204d
+	color:#185204
 }
 .group-list {
 	padding:10px
@@ -72,7 +72,7 @@
 	font-size:13px
 }
 .group-list .g-price .p {
-	color:#c6204d;
+	color:#185204;
 	font-weight:700
 }
 .group-list .g-price strong {
@@ -83,7 +83,7 @@
 }
 .group-list .buy-btn {
 	height:25px;
-	background-color:#c6204d;
+	background-color:#185204;
 	line-height:25px;
 	text-align:center;
 	color:#fff;

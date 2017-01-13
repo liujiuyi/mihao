@@ -117,7 +117,7 @@
                  <div style="display: table-cell;vertical-align: middle;width: 100%;">
                     <span style="display: block;font-size: 15px;">{$goods.short_name|escape:html}</span>
                     <span style="display: block;font-size: 15px;margin-top:10px;">{$goods.goods_weight|escape:html}</span>
-                    <a id="j_buy_now" href="{$goods.url}" style="-webkit-box-flex: 1;display: block;height: 25px;border-radius: 20px;text-align: center;background-color: #e1074a;line-height: 25px;color: #fff;font-size: 15px;margin: 0 0 0 50%;">查看详情</a>
+                    <a id="j_buy_now" href="{$goods.url}" style="-webkit-box-flex: 1;display: block;height: 25px;border-radius: 20px;text-align: center;background-color: #185204;line-height: 25px;color: #fff;font-size: 15px;margin: 0 0 0 50%;">查看详情</a>
                  </div>
               </div>
               <!--{/foreach}--> 

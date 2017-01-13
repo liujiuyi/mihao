@@ -71,7 +71,7 @@ body {
 	-webkit-text-stroke-width:.2px
 }
 .m-head {
-	background-color:#c7154a;
+	background-color:#185204;
 	line-height:35px;
 	height:35px;
 	color:#fff
@@ -113,7 +113,7 @@ body {
 	right:-10px;
 	min-width:20px;
 	height:20px;
-	background-color:#e60012;
+	background-color:#185204;
 	border:2px solid #fff;
 	display:block;
 	border-radius:10px;
@@ -177,7 +177,7 @@ body {
 	height:0;
 	border-width:6px;
 	border-style:solid;
-	border-color:#fff #fff #ca1f4c;
+	border-color:#fff #fff #185204;
 	font-size:0;
 	line-height:0;
 	float:right;
@@ -186,7 +186,7 @@ body {
 }
 .m-head .head-select-layout .user-more-box ul {
 	padding:0;
-	background-color:#c7204e;
+	background-color:#185204;
 	border-radius:3px
 }
 .m-head .head-select-layout .user-more-box li {
@@ -313,7 +313,7 @@ background-position:-240px 0
 	height:36px;
 	line-height:20px;
 	text-align:center;
-	background-color:#c6204d;
+	background-color:#185204;
 	font-size:14px;
 	color:#fff;
 	padding:8px 0

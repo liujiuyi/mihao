@@ -224,7 +224,7 @@ font-size:.14rem;
 	text-align:left;
 	cursor:pointer;
 	position:relative;
-	color:#d31b4d;
+	color:#185204;
 line-height:.3rem
 }
 .cart-sheet-view li .have-sale:after {
@@ -339,7 +339,7 @@ font-size:.14rem
 }
 .count-bar .c-price-list li .c-total {
 font-size:.24rem;
-	color:#d31d50;
+	color:#185204;
 	font-weight:bolder
 }
 .count-bar .c-price-list .c-total-line {
@@ -543,12 +543,12 @@ padding-right:.05rem;
 	line-height:0
 }
 .cart-checkout-view .c-payment .pay-wrap .is-hot .pay-slogan {
-	color:#d31d50
+	color:#185204
 }
 .cart-checkout-view .c-payment .pay-wrap .hot-tip {
 	display:inline-block;
 	line-height:140%;
-	background-color:#d31d50;
+	background-color:#185204;
 	color:#fff;
 	padding:0 4px;
 	border-radius:3px;
@@ -605,7 +605,7 @@ padding:.04rem;
 	color:#7e7e7e
 }
 .cart-checkout-view .c-payment .checked {
-	border-color:#d31d50
+	border-color:#185204
 }
 .cart-checkout-view .c-group-2 {
 	margin:0 auto;
@@ -1148,7 +1148,7 @@ padding:.1rem 0
 padding:.04rem 0
 }
 .cart-on-payment .payment-list-sel .checked {
-	border-color:#d31d50
+	border-color:#185204
 }
 .cart-on-payment .payment-list-sel .item-box-pic {
 	max-width:250px
@@ -1361,7 +1361,7 @@ height:.2rem;
 }
 .exchange-list .price strong {
 	font-weight:700;
-	color:#d31d50;
+	color:#185204;
 	padding-left:5px;
 	font-size:14px
 }
@@ -1372,7 +1372,7 @@ height:.2rem;
 	right:0;
 	top:0;
 	border-radius:20px;
-	background-color:#d31d50;
+	background-color:#185204;
 	display:block;
 	text-align:center;
 	color:#fff;
@@ -1429,7 +1429,7 @@ font-size:14px
 	display:block;
 	width:60%;
 	border-radius:6px;
-	background-color:#c6204d;
+	background-color:#185204;
 	color:#fff;
 	text-align:center;
 	text-decoration:none;
@@ -1445,7 +1445,7 @@ font-size:14px
 	margin-right:30%
 }
 .order-success .go-tel {
-	color:#c6204d;
+	color:#185204;
 	text-decoration:underline
 }
 .order-success .order-head {
@@ -1466,5 +1466,5 @@ font-size:14px
     padding: 0.12rem 0.22rem;
 }
 .btm-red {
-    background-color: #d41c50;
+    background-color: #185204;
 }

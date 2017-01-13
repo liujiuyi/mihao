@@ -43,7 +43,7 @@
                   </li>
                   <li>
                   	<input placeholder="验证码：" name="mobile_code" id="mobile_code" type="text" class="input-style" style=" width:50%">
-                      <a class="pull-right ect-bg" id="zphone" name="sendsms" onClick="sendSms();" type="botton" style=" margin-top:15px; background:#c6204d; height:32px; width:35%; color:#fff; text-align:center; line-height:32px; cursor:pointer">{$lang.get_code}</a>
+                      <a class="pull-right ect-bg" id="zphone" name="sendsms" onClick="sendSms();" type="botton" style=" margin-top:15px; background:#185204; height:32px; width:35%; color:#fff; text-align:center; line-height:32px; cursor:pointer">{$lang.get_code}</a>
                   </li>
               </ul>
               <p style=" margin:10px 0">

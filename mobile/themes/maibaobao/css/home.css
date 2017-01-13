@@ -168,7 +168,7 @@ max-height:131px
 	overflow:hidden
 }
 .channel-menu li {
-	width:25%;
+	width:20%;
 	float:left;
 	padding:2px 0
 }
@@ -181,10 +181,11 @@ max-height:131px
 	height:46px;
 	line-height:46px;
 	display:block;
-	border-radius:24px;
+	border-radius:50%;
 	text-align:center;
 	position:relative;
-	margin:0 auto
+	margin:0 auto;
+  border: 1px solid #e4e4e3;
 }
 .channel-menu .channel-item .c-logo .bubble {
 	/*background:url(http://cca.mbaobao.com/static/mod/mobile/mtouch/home/1.0.0/img/bubble.png?ebc3db) no-repeat;*/
@@ -490,7 +491,7 @@ width:33.3%
 }
 .products-list .product .info .price span {
 	font-size:1.14285em;
-	color:#c6204d
+	color:#185204
 }
 .products-list .product .info .price s {
 	text-decoration:line-through;
@@ -558,7 +559,7 @@ background-color:#f5f5f5
 	color:#969696
 }
 .classify .item dd a.select {
-	color:#c6204d
+	color:#185204
 }
 .welcome-app-download {
 	width:100%;

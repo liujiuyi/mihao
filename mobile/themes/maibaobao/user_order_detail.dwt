@@ -46,7 +46,7 @@
                             <div class="goodTxtInfo">
                                 <p>
 									订单金额：
-									<em style="color:red;">￥{$order.formated_total_fee}</em>
+									<em style="color:red;">{$order.formated_total_fee}</em>
 								</p>
                                 <p>
                                 	订单状态：{$order.order_status}
@@ -100,7 +100,7 @@
                             </div>
                             <div class="goodInfo">
                             	<p>{$goods.goods_name}{$goods.goods_attr}</p>
-                                <p>价格：￥{$goods.goods_price}</p>
+                                <p>价格：{$goods.goods_price}</p>
                                 <p>购买数量：{$goods.goods_number}</p>
                             </div>
                         </div>

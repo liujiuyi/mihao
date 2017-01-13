@@ -51,7 +51,7 @@
         	<!--{foreach from=$navigator item=nav}-->
             <li>
             	<a class="channel-item menu-new" href="{$nav.url}">
-                	<span class="c-logo"><img src="{$nav.pic}" ></span>
+                	<span class="c-logo"><img src="{$nav.pic}" style="vertical-align: middle"></span>
                     <span class="c-name">{$nav.name}</span>
                 </a>
             </li>

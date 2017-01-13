@@ -50,7 +50,7 @@ body {
 	position:absolute;
 	bottom:8px;
 	left:20%;
-	background-color:#c6204d
+	background-color:#185204
 }
 .products-list {
 	overflow:hidden
@@ -106,7 +106,7 @@ height:30px
 }
 .products-list .product .info .price span {
 	font-size:1.14285em;
-	color:#c6204d
+	color:#185204
 }
 .products-list .product .info .price s {
 	text-decoration:line-through;
@@ -188,7 +188,7 @@ height:30px
 }
 .sx-hd {
 	height:35px;
-	background-color:#c6204d
+	background-color:#185204
 }
 .sx-hd a {
 	height:35px;
@@ -248,7 +248,7 @@ height:30px
 	white-space:nowrap
 }
 .sx-bd .sx-item dd a.select {
-	border:1px solid #c6204d;
+	border:1px solid #185204;
 	position:relative
 }
 .sx-bd .sx-item dd a.select:after {
@@ -262,7 +262,7 @@ height:30px
 	background-size:28px 28px
 }
 .sx-bd .sx-item dd a.select span {
-	border:1px solid #c6204d
+	border:1px solid #185204
 }
 .sx-bd .sx-item dd.is-color {
 	display:none
@@ -303,7 +303,7 @@ height:30px
 	box-sizing:border-box
 }
 .sx-bd .sx-item dd.is-color a.select .color-value {
-	border:2px solid #c6204d;
+	border:2px solid #185204;
 	position:relative
 }
 .sx-bd .sx-item dd.is-color a.select:after {

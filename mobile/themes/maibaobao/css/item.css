@@ -8,7 +8,7 @@ body {
 	color:#333
 }
 .c-red {
-	color:#c7154a
+	color:#185204
 }
 .noLogin a:first-child {
 	border-right:1px solid #d1d1d1;
@@ -169,7 +169,7 @@ body {
 	line-height:20px
 }
 .top-notice strong {
-	color:#c7154a
+	color:#185204
 }
 .i-pics {
 	width:100%;
@@ -225,7 +225,7 @@ body {
 	opacity:.8
 }
 .slider-nav li.on {
-	background-color:#c7154a;
+	background-color:#185204;
 	opacity:1
 }
 .i-pics .fav-btn {
@@ -238,7 +238,7 @@ body {
 	color:#c8c8c8
 }
 .i-pics .ect-colory {
-	color:#c7154a
+	color:#185204
 }
 .i-price {
 	text-align:center;
@@ -248,7 +248,7 @@ body {
 .i-price .s-price {
 	font-size:36px;
 	font-weight:700;
-	color:#c7154a;
+	color:#185204;
 	display:inline-block
 }
 .i-price .s-price .yuan {
@@ -271,7 +271,7 @@ body {
 }
 .i-price .tag {
 	display:inline-block;
-	border:1px solid #ef135b;
+	border:1px solid #185204;
 	border-radius:2px;
 	padding:1px;
 	color:red;
@@ -292,7 +292,7 @@ body {
 	border:2px solid #fff
 }
 .i-color .active {
-	border-color:#c7154a
+	border-color:#185204
 }
 .buy-bar {
 	position:fixed;
@@ -332,10 +332,10 @@ body {
 	text-align:center;
 	background-color:#fff;
 	line-height:33px;
-	color:#c7154a;
+	color:#185204;
 	font-size:18px;
 	margin:5px 0 0;
-	border:1px solid #c7154a
+	border:1px solid #185204
 }
 .buy-bar .btn-buy-now {
 	-webkit-box-flex:1;
@@ -343,7 +343,7 @@ body {
 	height:35px;
 	border-radius:20px;
 	text-align:center;
-	background-color:#e1074a;
+	background-color:#185204;
 	line-height:35px;
 	color:#fff;
 	font-size:18px;
@@ -372,7 +372,7 @@ body {
 	position:absolute;
 	top:10px;
 	right:10px;
-	color:#c7154a
+	color:#185204
 }
 .i-promotion .sale-alipay {
 	padding-top:10px
@@ -433,7 +433,7 @@ body {
 	border-bottom-color:#fff
 }
 .i-panels .nav-tabs .active .iconfont {
-	color:#c7154a
+	color:#185204
 }
 .i-panels .panel {
 	background-color:#fff;
@@ -480,7 +480,7 @@ body {
 .item-comment .count .count-total strong {
 	font-size:23px;
 	display:block;
-	color:#c7154a
+	color:#185204
 }
 .item-comment .count .count-total span {
 	color:#555;
@@ -503,7 +503,7 @@ body {
 	text-align:center;
 	line-height:30px;
 	color:#fff;
-	background-color:#c7154a;
+	background-color:#185204;
 	border-radius:15px;
 	width:80%;
 	margin-top:10px
@@ -514,8 +514,8 @@ body {
 }
 .item-comment .comm-key .key {
 	padding:2px;
-	border:1px solid #c7154a;
-	color:#c7154a;
+	border:1px solid #185204;
+	color:#185204;
 	border-radius:3px;
 	width:auto
 }
@@ -547,7 +547,7 @@ body {
 	right:0
 }
 .comm-list .item .info-bar .vip-icon {
-	background-color:#c7154a;
+	background-color:#185204;
 	color:#fff;
 	font-size:10px;
 	padding:1px 2px;
@@ -587,7 +587,7 @@ body {
 	border-bottom:2px solid #fff
 }
 .item-same .tabs-btn .active a {
-	border-color:#c7154a
+	border-color:#185204
 }
 .item-same .bd {
 	display:table;
@@ -622,7 +622,7 @@ width:33%
 }
 .item-same .bd .price strong {
 	font-size:15px;
-	color:#c7154a;
+	color:#185204;
 	padding-right:5px
 }
 .item-same .bd .price s {
@@ -687,7 +687,7 @@ width:33%
 }
 .i-recomm .bd .swipe .group .item strong {
 	font-size:15px;
-	color:#c7154a;
+	color:#185204;
 	padding-right:5px
 }
 .i-recomm .bd .swipe .group .item s {

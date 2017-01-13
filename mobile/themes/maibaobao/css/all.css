@@ -139,7 +139,7 @@ height:54px
 	opacity:.8
 }
 .swiper-active-switch {
-	background-color:#c7154a;
+	background-color:#185204;
 	opacity:1
 }
 .box-h {
@@ -152,7 +152,7 @@ height:54px
 .box-h h3 {
 	font-size:16px;
 	height:30px;
-	border-left:2px solid #c6204d;
+	border-left:2px solid #185204;
 	float:left;
 	font-weight:700;
 	padding-left:10px
@@ -261,12 +261,12 @@ height:54px
 	white-space:nowrap
 }
 .swiper-type-item a.selected {
-	color:#c6204d
+	color:#185204
 }
 .swiper-type-item a.selected i {
 	display:block;
 	width:100%;
-	border-bottom:1px solid #c6204d;
+	border-bottom:1px solid #185204;
 	margin-top:5px
 }
 .brands-list {
@@ -335,7 +335,7 @@ color:#3c3c3c;
 padding:12px 14px 6px 12px
 }
 .swiper-type-item a.selected {
-color:#c6204d
+color:#185204
 }
 .swiper-type-item a.selected i {
 margin-top:3px
