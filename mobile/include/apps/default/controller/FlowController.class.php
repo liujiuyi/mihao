@@ -777,12 +777,6 @@ class FlowController extends CommonController {
 //                     $consignee_list [] = array(
 //                         'country' => C('shop_country')
 //                     );
-                       $address = '';
-                       $address .= model('RegionBase')->get_region_name(18);
-                       $address .= model('RegionBase')->get_region_name(245);
-                       $address .= model('RegionBase')->get_region_name(2077);
-                       
-                       $v_consignee['address'] = $address;
                        $v_consignee['country'] = 1;
                        $v_consignee['province'] = 18;
                        $v_consignee['city'] = 245;

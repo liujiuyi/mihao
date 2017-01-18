@@ -2,7 +2,7 @@
 <div id="J-view" class="cart-view">
 	<div>
     	<section class="cart-address-edit-view" style="disp">
-        	<dl class="f-group" hidden>
+        	<dl class="f-group">
             	<dd class="f-box">
                 	<div id="j_region_select" class="region-select">
                     	<!-- {if $real_goods_count gt 0} --> 

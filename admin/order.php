@@ -3069,7 +3069,21 @@ elseif ($_REQUEST['act'] == 'operate')
             $html .= $smarty->fetch('order_print.html') .
                 '<div style="PAGE-BREAK-AFTER:always"></div>';
         }
+        
+        $html .= '<table width="100%" cellpadding="1">';
+        $sql = "SELECT g.goods_name, sum(g.goods_number) goods_total " .
+                 "FROM " . $ecs->table('order_info') . " AS o," . $ecs->table('order_goods') . " AS g " .
+                 "WHERE o.order_id = g.order_id AND o.order_sn in (" . $_POST['order_id'] . ") GROUP BY g.goods_id";
+        $res = $db->query($sql);
+        while ($row = $db->fetchRow($res))
+        {
+          $goods_name = $row['goods_name'];
+          $goods_total = $row['goods_total'];
+          $html .= '<tr><td align="left">商品名称:' . $goods_name . '&nbsp;&nbsp;&nbsp;&nbsp;总数量:' . $goods_total . '</td></tr>';
+        }
 
+        $html .= '</table>';
+        
         echo $html;
         exit;
     }

@@ -40,10 +40,10 @@
         	<div id="focus" class="swipe" style="visibility: visible;">
             	<div class="swipe-wrap bd">
                 	<ul>
-                    	<!--<li><a href="{$goods.goods_img}"><img src="{$goods.goods_img}" alt="{$goods.goods_name}" width="320" height="320" /></a></li>-->
+                    	<!--<li><a href="{$goods.goods_img}"><img src="{$goods.goods_img}" alt="{$goods.goods_name}" width="100%" /></a></li>-->
                 <!--{if $pictures}--> 
         				<!-- {foreach from=$pictures item=picture name=no}--> 
-        				<li><a href="{$picture.img_url}"><img src="{$picture.img_url}" alt="{$picture.img_desc}" width="320" height="320" /></a></li>
+        				<li><a href="{$picture.img_url}"><img src="{$picture.img_url}" alt="{$picture.img_desc}" width="100%" /></a></li>
         				<!--{/foreach}--> 
        					<!--{/if}-->
                     </ul>

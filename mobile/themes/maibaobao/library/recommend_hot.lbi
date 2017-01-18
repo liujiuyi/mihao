@@ -34,7 +34,6 @@
     <hr style="color: #dfdfdf;clear: both;height: 0;margin:0">
     <!--{/foreach}-->
     <div class="clearfix"></div>
-    <div class="see-more" id="see-all-pic"><span class="more-loading"><a href="{:url('category/index');}">点击查看更多</a></span></div>
 </div>
 <!-- {/if}--> 
 
