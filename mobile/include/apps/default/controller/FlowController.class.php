@@ -495,11 +495,19 @@ class FlowController extends CommonController {
                 $insure_disabled = ($val ['insure'] == 0);
                 $cod_disabled = ($val ['support_cod'] == 0);
             }
+            /*配送方式是否可选*/
+            if(strstr($shipping_list [$key] ['shipping_name'], "送货") && $total ['amount'] < 360) {
+             $shipping_list [$key] ['shipping_disabled'] = 'true';
+            }
         }
-
         $this->assign('shipping_list', $shipping_list);
         $this->assign('insure_disabled', $insure_disabled);
         $this->assign('cod_disabled', $cod_disabled);
+        
+        /*取得配送站列表*/
+        $sql = 'SELECT * FROM ' . $this->model->pre . 'distribution';
+        $distribution_list = $this->model->query($sql);
+        $this->assign('distribution_list', $distribution_list);
 
         /* 取得支付列表 */
         if ($order ['shipping_id'] == 0) {
@@ -1011,6 +1019,7 @@ class FlowController extends CommonController {
         // 订单信息
         $order = array(
             'shipping_id' => I('post.shipping'),
+            'distribution_id' => I('post.distribution'),
             'pay_id' => I('post.payment'), // 付款方式
             'pack_id' => I('post.pack', 0),
             'card_id' => isset($_POST ['card']) ? intval($_POST ['card']) : 0,
@@ -1146,6 +1155,12 @@ class FlowController extends CommonController {
         }
         $order ['shipping_fee'] = $total ['shipping_fee'];
         $order ['insure_fee'] = $total ['shipping_insure'];
+
+        /* 配送站点 */
+        if ($order ['distribution_id'] > 0) {
+           $distribution_name= $this->model->table('distribution')->field('distribution_name')->where("distribution_id = ' " . $order ['distribution_id'] . "'")->getOne();
+           $order ['distribution_name'] = $distribution_name;
+        }
 
         /* 支付方式 */
         if ($order ['pay_id'] > 0) {

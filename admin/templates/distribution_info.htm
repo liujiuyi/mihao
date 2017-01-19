@@ -1,0 +1,30 @@
+<!-- $Id: user_rank_info.htm 15053 2008-10-25 03:07:46Z testyang $ -->
+{include file="pageheader.htm"}
+
+<div class="main-div">
+<form action="distribution.php" method="post" name="theForm">
+<table width="100%">
+  <tr>
+    <td class="label">配送站点名称: </td>
+    <td><input type="text" name="distribution_name" value="{$distribution.distribution_name}" maxlength="20" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="id" value="{$distribution.distribution_id}" />
+      <input type="submit" value="{$lang.button_submit}" class="button" />
+      <input type="reset" value="{$lang.button_reset}" class="button" />
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+{literal}
+<script language="JavaScript">
+<!--
+document.forms['theForm'].elements['distribution_name'].focus();
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

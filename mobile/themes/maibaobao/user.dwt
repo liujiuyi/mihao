@@ -6,8 +6,8 @@
             	<div class="userHead" style="border:0px;">{if $info.headimgurl}<img src="{$info.headimgurl}" style="width:5em;height:5em">{else}<i class="glyphicon glyphicon-user"></i>{/if}</div>
                 <dl class="userInfo">
                 	<dt>{$info.username}</dt>
-                  <dd></dd>
-                  <dd>您是会员编号是:{$user_id}号</dd>
+                  <dd>{$user_distribution_name}</dd>
+                  <dd>您的会员编号是:{$user_id}号</dd>
                 </dl>
             </div>
         </div>

@@ -26,7 +26,7 @@ $_LANG['shipping_template_info'] = '订单模板变量说明:<br/>{$shop_name}�
 
 /* 表单部分 */
 $_LANG['shipping_install'] = '安装配送站';
-$_LANG['install_succeess'] = '配送站 %s 安装成功！';
+$_LANG['install_succeess'] = '配送方式 %s 安装成功！';
 $_LANG['del_lable'] = '删除标签';
 $_LANG['upload_shipping_bg'] = '上传打印单图片';
 $_LANG['del_shipping_bg'] = '删除打印单图片';
@@ -64,7 +64,7 @@ $_LANG['lable_box']['pigeon'] = '√-对号';
 $_LANG['no_shipping_name'] = '对不起，配送站名称不能为空。';
 $_LANG['no_shipping_desc'] = '对不起，配送站描述内容不能为空。';
 $_LANG['repeat_shipping_name'] = '对不起，已经存在一个同名的配送站。';
-$_LANG['uninstall_success'] = '配送站 %s 已经成功卸载。';
+$_LANG['uninstall_success'] = '配送方式 %s 已经成功卸载。';
 $_LANG['add_shipping_area'] = '为该配送站新建配送区域';
 $_LANG['no_shipping_insure'] = '对不起，保价费用不能为空，不想使用请将其设置为0';
 $_LANG['not_support_insure'] = '该配送站不支持保价,保价费用设置失败';

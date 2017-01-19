@@ -159,6 +159,7 @@
 @media (min-height: 33.875em) {
   .picker__weekday {
     padding-bottom: .5em;
+    text-align: center;
   }
 }
 /**

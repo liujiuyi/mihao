@@ -101,6 +101,7 @@ $modules['11_system']['01_shop_config']             = 'shop_config.php?act=list_
 // $modules['11_system']['shop_authorized']             = 'license.php?act=list_edit';
 // $modules['11_system']['02_payment_list']            = 'payment.php?act=list';
 $modules['11_system']['03_shipping_list']           = 'shipping.php?act=list';
+$modules['11_system']['09_distribution_list']           = 'distribution.php?act=list';
 // $modules['11_system']['04_mail_settings']           = 'shop_config.php?act=mail_settings';
 // $modules['11_system']['05_area_list']               = 'area_manage.php?act=list';
 // //$modules['11_system']['06_plugins']                 = 'plugins.php?act=list';

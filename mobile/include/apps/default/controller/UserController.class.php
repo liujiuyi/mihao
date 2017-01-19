@@ -59,6 +59,11 @@ class UserController extends CommonController {
     public function index() {
         //会员编号
          $this->assign('user_id', $this->user_id);
+        //配送站
+         $sql = 'SELECT distribution_name FROM ' . $this->model->pre . 'distribution WHERE distribution_id = (SELECT distribution_id FROM ' . $this->model->pre . 'order_info WHERE user_id= ' . $this->user_id . ' ORDER BY order_id DESC LIMIT 1)';
+         $res = $this->model->query($sql);
+         
+         $this->assign('user_distribution_name', $res[0]['distribution_name']);
         // 用户等级
         if ($rank = model('ClipsBase')->get_rank_info()) {
             $this->assign('rank_name', sprintf(L('your_level'), $rank['rank_name']));

@@ -81,6 +81,7 @@ $purview['website']              = 'website';//ecmoban
     $purview['shp_webcollect']            = 'webcollect_manage';
     $purview['02_payment_list']      = 'payment';
     $purview['03_shipping_list']     = array('ship_manage','shiparea_manage');
+    $purview['09_distribution_list'] = array('ship_manage','shiparea_manage');
     $purview['04_mail_settings']     = 'shop_config';
     $purview['05_area_list']         = 'area_manage';
     $purview['07_cron_schcron']      = 'cron';

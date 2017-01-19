@@ -14,7 +14,7 @@
       <section class="ect-margin-tb ect-padding-lr ect-padding-tb checkout-add">
           <label for="addressId{$con_list.address_id}">
           <p class="title">{$consignee.consignee|escape} <span>{$consignee.mobile}</span></p>
-          <p hidden>{$consignee.address}</p>
+          <p>{$consignee.address}</p>
           <i class="fa fa-angle-right"></i>
           </label>
         </section>
@@ -28,8 +28,8 @@
           <ul class="ect-radio">
             <!-- {foreach from=$shipping_list item=shipping} 循环配送方式 -->
             <li>
-              <input name="shipping" type="radio" id="shipping_{$shipping.shipping_id}" value="{$shipping.shipping_id}"  {if $order.shipping_id eq $shipping.shipping_id}checked="true"{/if} supportCod="{$shipping.support_cod}" insure="{$shipping.insure}" onclick="selectShipping(this)">
-              <label for="shipping_{$shipping.shipping_id}">{$shipping.shipping_name}<i></i></label>
+              <input name="shipping" type="radio" id="shipping_{$shipping.shipping_id}" value="{$shipping.shipping_id}"  {if $shipping.shipping_disabled}disabled{/if} supportCod="{$shipping.support_cod}" insure="{$shipping.insure}" onclick="selectShipping(this)">
+              <label for="shipping_{$shipping.shipping_id}">{$shipping.shipping_name}[{$shipping.shipping_desc}]<i></i></label>
             </li>
             <!-- {/foreach} 循环配送方式 -->
           </ul>
@@ -37,12 +37,27 @@
         <!--{else}-->
         <input name="shipping"  type="radio" value = "-1" checked="checked" style="display:none" />
         <!--{/if}--> 
+        
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne2">
+        <p><b>配送站点</b><span class="label ect-bg-colory">{$lang.require_field}</span></p>
+        <i class="fa fa-angle-down"></i></a>
+        <div id="collapseOne2" class="panel-collapse collapse in">
+          <ul class="ect-radio">
+            <!-- {foreach from=$distribution_list item=distribution} 循环配送方式 -->
+            <li>
+              <input name="distribution" type="radio" id="distribution_{$distribution.distribution_id}" value="{$distribution.distribution_id}">
+              <label for="distribution_{$distribution.distribution_id}">{$distribution.distribution_name}<i></i></label>
+            </li>
+            <!-- {/foreach} 循环配送方式 -->
+          </ul>
+        </div>
+        
         <!--配送日期-->
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo2">
-        <p><b>配送日期</b><span class="label ect-bg-colory">{$lang.require_field}</span></p>
+        <p><b>起始日期</b><span class="label ect-bg-colory">{$lang.require_field}</span></p>
         <i class="fa fa-angle-down"></i></a>
         <div id="collapseTwo2" class="panel-collapse collapse in">
-          <input name="shipping_date" type="text" id="shipping_date" class="datepicker" placeholder="请选择配送日期" > 
+          <input name="shipping_date" type="text" id="shipping_date" class="datepicker" placeholder="请选择配送起始日期" > 
           <link rel="stylesheet" href="__TPL__/pickadate/themes/default.css">
           <link rel="stylesheet" href="__TPL__/pickadate/themes/default.date.css">
           <script src="__TPL__/pickadate/jquery.1.7.0.js"></script>
@@ -51,7 +66,11 @@
           <script type="text/javascript">
           var year = (new Date()).getFullYear();
           var month = (new Date()).getMonth();
-          var date = (new Date()).getDate() + (7 - (new Date()).getDay() + 1)
+          var date = (new Date()).getDate() + (14 - (new Date()).getDay() + 1);
+          var week = new Date().getDay();
+          if(week > 0 && week < 6){
+            date = (new Date()).getDate() + (7 - (new Date()).getDay() + 1);
+          }
               var $input = $( '.datepicker' ).pickadate({
                   min: [year, month, date],
                   closeOnSelect: true,
@@ -239,6 +258,31 @@
         <input type="submit" name="submit" value="{$lang.order_submit}" class="btn btn-info ect-btn-info ect-colorf ect-bg"/>
         <input type="hidden" name="step" value="done" />
       </div>
+      <section class="ect-margin-tb ect-margin-bottom0 ect-padding-lr checkout-select checkout-pro-list">
+        <p><b>配送规则</b></p>
+        <ul>
+          <li>
+            <dl>
+              <dd class="pull-left">蔬菜类配送时间为每周一和周四,半月套餐共配送四次，月套餐共配送八次</dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dd class="pull-left">蛋类配送时间为每周一,共配送四次</dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dd class="pull-left">肉类配送时间为每周四</dd>
+            </dl>
+          </li>
+          <li>
+            <dl>
+              <dd class="pull-left">米类及其它配送时间为每周一</dd>
+            </dl>
+          </li>
+        </ul>
+       </section>
     </form>
   </div>
 </div>

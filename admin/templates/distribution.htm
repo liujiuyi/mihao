@@ -1,0 +1,30 @@
+<!-- $Id: user_rank.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<form method="post" action="" name="listForm">
+<!-- start distribution list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellspacing='1' id="list-table">
+  <tr>
+    <th>站点名称</th>
+    <th>{$lang.handler}</th>
+  </tr>
+  {foreach from=$distribution_list item=distribution}
+  <tr>
+    <td class="first-cell" ><span onclick="listTable.edit(this,'edit_name', {$rank.rank_id})">{$distribution.distribution_name}</span></td>
+    <td align="center">
+    <a href="javascript:;" onclick="listTable.remove({$distribution.distribution_id}, '{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a></td>
+  </tr>
+  {/foreach}
+  </table>
+
+{if $full_page}
+</div>
+<!-- end distribution list -->
+</form>
+{include file="pagefooter.htm"}
+{/if}

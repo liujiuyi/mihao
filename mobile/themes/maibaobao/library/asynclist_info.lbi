@@ -25,14 +25,14 @@
 <!-- 品牌 start--> 
 <!--{if $brand}-->
 
-	<div class="item-wrap">
-    	<a class="new-brand" href="{$brand.url}">
-        	<div class="brand-bottom">
-            	<div class="brand-left">
-					<img width="100%" src="../../data/brandlogo/{$brand.brand_logo}">
-				</div>
-            	<div class="brand-right">
-                	<p class="name oneLine">{$brand.brand_name}</p>
+  <div class="item-wrap">
+      <a class="new-brand" href="{$brand.url}">
+          <div class="brand-bottom">
+              <div class="brand-left">
+          <img width="100%" src="../../data/brandlogo/{$brand.brand_logo}">
+        </div>
+              <div class="brand-right">
+                  <p class="name oneLine">{$brand.brand_name}</p>
                 </div>
             </div>
             <img width="100%" src="{$brand.brand_banner}">
@@ -130,22 +130,22 @@
 <!-- 用户订单 start--> 
 <!--{if $orders}-->
 <a href="{:url('user/order_detail', array('order_id'=>$this->_var['orders']['order_id']))}">
-	<div class="mdCont">
-		<div class="goodImg">
-        	<p>
-            	<img src="{$orders.img}" class="pull-left" width="100%" />
+  <div class="mdCont">
+    <div class="goodImg">
+          <p>
+              <img src="{$orders.img}" class="pull-left" width="100%" />
             </p>
         </div>
         <div class="goodInfo">
-        	<p>{$lang.order_number}：{$orders.order_sn}</p>
+          <p>{$lang.order_number}：{$orders.order_sn}</p>
             <p>{$lang.order_status}：{$orders.order_status}</p>
             <p>{$lang.order_total_fee}：{$orders.total_fee}</p>
             <p>{$lang.order_addtime}：{$orders.order_time}</p>
         </div>
         <div class="goodGoInfo">
-        	<img width="50%" alt="订单详情" src="__TPL__/images/36.png">
+          <img width="50%" alt="订单详情" src="__TPL__/images/36.png">
         </div>
-	</div>
+  </div>
 </a> 
 <!-- {/if}--> 
 <!-- 用户订单end--> 
@@ -153,17 +153,17 @@
 <!-- 配送地址 start--> 
 <!--{if $consignee}--> 
 <div class="info">
-	<p>
-		<strong>收货人：</strong>
-		{$consignee.consignee} {$consignee.mobile}
-	</p>
-    <p hidden>
-		<strong>收货地址：</strong>
-		{$consignee.address}
-	</p>
+  <p>
+    <strong>收货人：</strong>
+    {$consignee.consignee} {$consignee.mobile}
+  </p>
+    <p>
+    <strong>收货地址：</strong>
+    {$consignee.address}
+  </p>
 </div>
 <div class="option" style=" text-align:left">
-	<a class="btm btm-m btm-black" href="{$consignee.url}" style=" font-size:14px; line-height:20px; background:#000; padding:8px; color:#fff">编辑</a>
+  <a class="btm btm-m btm-black" href="{$consignee.url}" style=" font-size:14px; line-height:20px; background:#000; padding:8px; color:#fff">编辑</a>
 </div>
 <!-- {/if}--> 
 <!-- 配送地址end--> 

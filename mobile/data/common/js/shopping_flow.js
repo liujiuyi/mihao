@@ -523,6 +523,7 @@ function checkOrderForm(frm)
 {
   var paymentSelected = false;
   var shippingSelected = false;
+  var distributionSelected = false;
 
   // 检查是否选择了支付配送方式
   for (i = 0; i < frm.elements.length; i ++ )
@@ -530,6 +531,10 @@ function checkOrderForm(frm)
     if (frm.elements[i].name == 'shipping' && frm.elements[i].checked)
     {
       shippingSelected = true;
+    }
+    if (frm.elements[i].name == 'distribution' && frm.elements[i].checked)
+    {
+      distributionSelected = true;
     }
 
     if (frm.elements[i].name == 'payment' && frm.elements[i].checked)
@@ -543,6 +548,12 @@ function checkOrderForm(frm)
     alert(flow_no_shipping);
     return false;
   }
+  
+  if ( ! distributionSelected)
+  {
+    alert("请选择配送站点");
+    return false;
+  }
 
   if ( ! paymentSelected)
   {
@@ -552,7 +563,7 @@ function checkOrderForm(frm)
   
   if(Utils.isEmpty(frm.elements['shipping_date_submit'].value))
   {
-    alert("请选择配送日期");
+    alert("请选择配送起始日期");
     return false;
   }
 

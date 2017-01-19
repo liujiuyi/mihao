@@ -37,23 +37,11 @@
   <table width="100%" border="0">
     <caption><strong> {$lang.consignee} : {$address.consignee|escape} </strong></caption>
     <tr>
-      <td> {$lang.email} </td>
-      <td> <a href="mailto:{$address.email}">{$address.email}</a> </td>
-    </tr>
-    <tr>
       <td> {$lang.address} </td>
       <td> {$address.address|escape} </td>
     </tr>
     <tr>
-      <td> {$lang.zipcode} </td>
-      <td> {$address.zipcode|escape} </td>
-    </tr>
-    <tr>
-      <td> {$lang.tel} </td>
-      <td> {$address.tel|escape} </td>
-    </tr>
-    <tr>
-      <td> {$lang.mobile} </td>
+      <td> 手机 </td>
       <td> {$address.mobile|escape} </td>
     </tr>
   </table>
@@ -97,12 +85,18 @@
   <tr>
     <td><div align="right"><strong>{$lang.label_shipping}</strong></div></td>
     <td>{if $exist_real_goods}{if $order.shipping_id > 0}{$order.shipping_name}{else}{$lang.require_field}{/if}<a href="order.php?act=edit&order_id={$order.order_id}&step=shipping" class="special">{$lang.edit}</a>&nbsp;&nbsp;<input type="button" onclick="window.open('order.php?act=info&order_id={$order.order_id}&shipping_print=1')" class="button" value="{$lang.print_shipping}"> {if $order.insure_fee > 0}（{$lang.label_insure_fee}{$order.formated_insure_fee}）{/if}{/if}</td>
-    <td><div align="right"><strong>{$lang.label_shipping_time}</strong></div></td>
-    <td>{$order.shipping_time}</td>
+    <td><div align="right"><strong>配送站点：</strong></div></td>
+    <td>{if $order.distribution_id>0}<span>{$order.distribution_name}{else}N/A{/if}</span></td>
   </tr>
   <tr>
     <td><div align="right"><strong>{$lang.label_invoice_no}</strong></div></td>
     <td>{if $order.shipping_id>0 and $order.shipping_status>0}<span>{if $order.invoice_no}{$order.invoice_no}{else}N/A{/if}</span><a href="order.php?act=edit&order_id={$order.order_id}&step=shipping" class="special">{$lang.edit}</a>{/if}</td>
+    <td><div align="right"><strong>{$lang.label_shipping_time}</strong></div></td>
+    <td>{$order.shipping_time}</td>
+  </tr>
+  <tr>
+    <td><div align="right"><strong>配送时间</strong></div></td>
+    <td>{$order.shipping_date}</td>
     <td><div align="right"><strong>{$lang.from_order}</strong></div></td>
     <td>{$order.referer}</td>
   </tr>
@@ -116,10 +110,10 @@
     <td>{$order.mobile}</td>
   </tr>
   <tr>
+    <td><div align="right"><strong>{$lang.label_address}</strong></div></td>
+    <td>[{$order.region}] {$order.address|escape}</td>
     <td><div align="right"><strong>配送起始日期</strong></div></td>
     <td>{$order.best_time|escape}</td>
-    <td></td>
-    <td></td>
   </tr>
 </table>
 </div>

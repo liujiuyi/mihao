@@ -31,6 +31,18 @@ if ($_REQUEST['act'] == 'order_query')
     /* 载入配送方式 */
     $smarty->assign('shipping_list', shipping_list());
 
+    /* 载入配送站点 */
+    $distribution_list = array();
+    $sql = "SELECT * FROM " . $ecs->table('distribution');
+    $distribution_list = $GLOBALS['db']->getAll($sql);
+    $smarty->assign('distribution_list', $distribution_list);
+    
+    /* 载入商品分类 */
+    $category_list = array();
+    $sql = "SELECT * FROM " . $ecs->table('category') . " WHERE parent_id = 0"; 
+    $category_list = $GLOBALS['db']->getAll($sql);
+    $smarty->assign('cat_list', $category_list);
+
     /* 载入支付方式 */
     $smarty->assign('pay_list', payment_list());
 
@@ -4920,7 +4932,9 @@ function order_list()
         $filter['end_time'] = empty($_REQUEST['end_time']) ? '' : (strpos($_REQUEST['end_time'], '-') > 0 ?  local_strtotime($_REQUEST['end_time']) : $_REQUEST['end_time']);
         
 
-        $filter['goods_type'] = isset($_REQUEST['goods_type']) ? intval($_REQUEST['goods_type']) : 0;
+        $filter['distribution_id'] = empty($_REQUEST['distribution_id']) ? 0 : intval($_REQUEST['distribution_id']);
+        $filter['cat_id'] = empty($_REQUEST['cat_id']) ? 0 : intval($_REQUEST['cat_id']) ;
+        $filter['shipping_date'] = empty($_REQUEST['shipping_date']) ? '' : $_REQUEST['shipping_date'];
         
         $where = 'WHERE 1 ';
         if ($filter['order_sn'])
@@ -5003,6 +5017,14 @@ function order_list()
         {
             $where .= " AND o.add_time <= '$filter[end_time]'";
         }
+        if ($filter['distribution_id'])
+        {
+            $where .= " AND o.distribution_id  = '$filter[distribution_id]'";
+        }
+        if ($filter['shipping_date'])
+        {
+            $where .= " AND o.shipping_date = '$filter[shipping_date]'";
+        }
 
         //综合状态
         switch($filter['composite_status'])
@@ -5083,14 +5105,13 @@ function order_list()
         $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 
         /* 查询 */
-        if ($filter['goods_type'])
+        if ($filter['cat_id'])
         {
-         $sql = "SELECT DISTINCT o.order_id FROM "
-           . $GLOBALS['ecs']->table('order_info') . " o, "
+         $sql = "SELECT DISTINCT og.order_id FROM "
            . $GLOBALS['ecs']->table('order_goods') . " og, "
            . $GLOBALS['ecs']->table('goods') . " g, "
            . $GLOBALS['ecs']->table('category') . " c " .
-           " WHERE o.order_id = og.order_id and g.goods_id = og.goods_id and g.cat_id = c.cat_id and c.cat_name like '%蔬菜%'";
+           " WHERE g.goods_id = og.goods_id and g.cat_id = c.cat_id and c.cat_id = ' " . $filter['cat_id'] . "'";
          $where .= " AND o.order_id in($sql)";
         }
         
