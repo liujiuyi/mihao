@@ -24,11 +24,11 @@
 <section class="products-list" style="padding-top:.2em;">
   <hr style="color: #dfdfdf;clear: both;height: 0;margin:0;">
 	<!--{foreach name=goods_list from=$goods_list item=goods}-->
-	<div class="product" style="width:100%;padding:.5rem;" onclick="location.href='{$goods.url}';">
+	<div class="product" style="width:100%;padding:.5rem;position: relative;" onclick="location.href='{$goods.url}';">
     	<div class="pic" style="width:40%;float:left;">
         	<img src="{$goods.original_img}" alt="{$goods.name}" width="100%"/>
         </div>
-        <div class="info" style="width:55%;float:right;text-align: left;padding:0">
+        <div class="info" style="width:55%;float:right;text-align: left;padding:0;">
         	<p class="name" style="width:65%;float: left;">
           	<a href="{$goods.url}">{$goods.name}</a>
           </p>
@@ -36,7 +36,7 @@
           	<span><!--{if $goods.promote_price}-->{$goods.promote_price}<!--{else}-->{$goods.shop_price}<!--{/if}--></span>
           </p>
           <!-- {if $goods.bonus_money} 红包-->
-          <p style="width:100%;float: right;background: #fef8ec;text-align: right;margin-top:1rem;">
+          <p style="width: 53%;float: right;background: #fef8ec;text-align: right;position: absolute;bottom: .5rem;">
             <span style="color: #c7154a;padding-right:.3rem;">赠送:{$goods.bonus_name}</span>
           </p>
           <!-- {/if} -->

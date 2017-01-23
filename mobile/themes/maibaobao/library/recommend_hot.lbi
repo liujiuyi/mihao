@@ -25,7 +25,7 @@
             <span><!--{if $hot_goods.promote_price}-->{$hot_goods.promote_price}<!--{else}-->{$hot_goods.shop_price}<!--{/if}--></span>
           </p>
           <!-- {if $hot_goods.bonus_money} 红包-->
-          <p style="width:100%;float: right;background: #fef8ec;text-align: right;margin-top:1rem;">
+          <p style="width: 53%;float: right;background: #fef8ec;text-align: right;position: absolute;bottom: .5rem;">
             <span style="color: #c7154a;padding-right:.3rem;">赠送:{$hot_goods.bonus_name}</span>
           </p>
           <!-- {/if} -->
