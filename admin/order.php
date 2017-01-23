@@ -878,7 +878,7 @@ elseif ($_REQUEST['act'] == 'delivery_ship')
             log_account_change($order['user_id'], 0, 0, intval($integral['rank_points']), intval($integral['custom_points']), sprintf($_LANG['order_gift_integral'], $order['order_sn']));
 
             /* 发放红包 */
-            send_order_bonus($order_id);
+            //send_order_bonus($order_id);
         }
 
         /* 发送邮件 */
@@ -3365,6 +3365,32 @@ elseif ($_REQUEST['act'] == 'batch_operate_post')
 
         $sn_str = $_LANG['remove_order'];
     }
+    elseif ('receive' == $operation)
+    {
+        foreach ($order_id_list as $id_order)
+        {
+            /* 检查能否操作 */
+            $order = order_info('', $id_order);
+            $operable_list = operable_list($order);
+            if (!isset($operable_list['prepare']))
+            {
+                $sn_not_list[] = $id_order;
+                continue;
+            }
+            /* 标记订单为“收货确认” */
+            $arr = array('shipping_status' => SS_RECEIVED);
+            update_order($order['order_id'], $arr);
+            /* 记录log */
+            order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], $action_note);
+
+            /* todo 记录日志 */
+            admin_log($order['order_sn'], 'receive', 'order');
+
+            $sn_list[] = $order['order_sn'];
+        }
+
+        $sn_str = '以下订单无法确认收货';
+    }
     else
     {
         die('invalid params');
@@ -3499,10 +3525,21 @@ elseif ($_REQUEST['act'] == 'operate_post')
             $arr['shipping_status'] = SS_RECEIVED;
             $order['shipping_status'] = SS_RECEIVED;
         }
-        update_order($order_id, $arr);
+        
+        $s_order_sn = explode("-",$order['order_sn'])[0];
+        $s_sql = "SELECT order_id, order_sn, shipping_status FROM ".$ecs->table('order_info'). " WHERE order_sn like '$s_order_sn%'";
+        $s_order_res= $db->query($s_sql);
+        
+        while ($s_order = $db->fetchRow($s_order_res)){
+         update_order($s_order['order_id'], $arr);
+         /* 记录log */
+         order_action($s_order['order_sn'], OS_CONFIRMED, $s_order['shipping_status'], PS_PAYED, $action_note);
 
-        /* 记录log */
-        order_action($order['order_sn'], OS_CONFIRMED, $order['shipping_status'], PS_PAYED, $action_note);
+         /* 发放红包 */
+         if(!strstr($s_order['order_sn'],"-")){
+          send_order_bonus2($s_order['order_sn']);
+         }
+        }
     }
     /* 设为未付款 */
     elseif ('unpay' == $operation)
@@ -5111,17 +5148,17 @@ function order_list()
            . $GLOBALS['ecs']->table('order_goods') . " og, "
            . $GLOBALS['ecs']->table('goods') . " g, "
            . $GLOBALS['ecs']->table('category') . " c " .
-           " WHERE g.goods_id = og.goods_id and g.cat_id = c.cat_id and c.cat_id = ' " . $filter['cat_id'] . "'";
+           " WHERE g.goods_id = og.goods_id and g.cat_id = c.cat_id and (c.cat_id = ' " . $filter['cat_id'] . "' or c.parent_id = ' " . $filter['cat_id'] . "')";
          $where .= " AND o.order_id in($sql)";
         }
         
         $sql = "SELECT o.order_id, o.order_sn, o.add_time, o.order_status, o.shipping_status, o.order_amount, o.money_paid," .
-                    "o.pay_status, o.consignee, o.address, o.email, o.tel, o.extension_code, o.extension_id, " .
+                    "o.pay_status, o.consignee, o.address, o.email, o.tel, o.extension_code, o.extension_id, o.shipping_date, " .
                     "(" . order_amount_field('o.') . ") AS total_fee, " .
                     "IFNULL(u.user_name, '" .$GLOBALS['_LANG']['anonymous']. "') AS buyer ".
                 " FROM " . $GLOBALS['ecs']->table('order_info') . " AS o " .
                 " LEFT JOIN " .$GLOBALS['ecs']->table('users'). " AS u ON u.user_id=o.user_id ". $where .
-                " ORDER BY $filter[sort_by] $filter[sort_order] ".
+                " ORDER BY $filter[sort_by] $filter[sort_order] ".", o.order_id ASC" .
                 " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 
         foreach (array('order_sn', 'consignee', 'email', 'address', 'zipcode', 'tel', 'user_name') AS $val)

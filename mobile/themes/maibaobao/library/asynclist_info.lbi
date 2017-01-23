@@ -141,6 +141,8 @@
             <p>{$lang.order_status}：{$orders.order_status}</p>
             <p>{$lang.order_total_fee}：{$orders.total_fee}</p>
             <p>{$lang.order_addtime}：{$orders.order_time}</p>
+            <p style="color: #c7154a;">配送日期：{$orders.shipping_date}</p>          
+            <!--{if $orders.child_order}--><p style="color: #c7154a;">该订单为子订单，无需支付</p><!--{/if}-->
         </div>
         <div class="goodGoInfo">
           <img width="50%" alt="订单详情" src="__TPL__/images/36.png">

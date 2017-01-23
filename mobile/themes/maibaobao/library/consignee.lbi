@@ -39,7 +39,7 @@
                 <dd class="f-box">
                 	<!-- {if $real_goods_count gt 0} --> 
     				<!-- 购物车中存在实体商品显示详细地址 -->
-                    <textarea name="address"  id="address_{$sn}" placeholder="详细地址" rows="10" cols="30">{$consignee.address|escape}</textarea>
+                    <textarea name="address"  id="address_{$sn}" placeholder="详细地址[例：XX小区XX期XX楼X单元X号]" rows="10" cols="30">{$consignee.address|escape}</textarea>
                     <!-- {/if} -->
                 </dd>
             </dl>

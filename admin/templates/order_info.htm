@@ -219,7 +219,7 @@
       <div align="right"><strong>{$lang.label_operable_act}</strong> </div></td>
     <td colspan="5">{if $operable_list.confirm}
       <input name="confirm" type="submit" value="{$lang.op_confirm}" class="button" />
-        {/if} {if $operable_list.pay}
+        {/if} {if $operable_list.pay && $order.order_amount gt 0}
         <input name="pay" type="submit" value="{$lang.op_pay}" class="button" />
         {/if} {if $operable_list.unpay}
         <input name="unpay" type="submit" class="button" value="{$lang.op_unpay}" />

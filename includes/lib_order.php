@@ -3005,6 +3005,60 @@ function send_order_bonus($order_id)
 
     return true;
 }
+function send_order_bonus2($order_sn)
+{
+    /* 取得订单应该发放的红包 */
+    $sql = "";
+    $bonus_list = order_bonus2($order_sn);
+
+    /* 如果有红包，统计并发送 */
+    if ($bonus_list)
+    {
+        /* 用户信息 */
+        $sql = "SELECT u.user_id, u.user_name, u.email " .
+                "FROM " . $GLOBALS['ecs']->table('order_info') . " AS o, " .
+                          $GLOBALS['ecs']->table('users') . " AS u " .
+                "WHERE o.order_sn = '$order_sn' " .
+                "AND o.user_id = u.user_id ";
+        $user = $GLOBALS['db']->getRow($sql);
+
+        /* 统计 */
+        $count = 0;
+        $money = '';
+        foreach ($bonus_list AS $bonus)
+        {
+            $count += $bonus['number'];
+            $money .= price_format($bonus['type_money']) . ' [' . $bonus['number'] . '], ';
+
+            /* 修改用户红包 */
+            $sql = "INSERT INTO " . $GLOBALS['ecs']->table('user_bonus') . " (bonus_type_id, user_id) " .
+                    "VALUES('$bonus[type_id]', '$user[user_id]')";
+            for ($i = 0; $i < $bonus['number']; $i++)
+            {
+                if (!$GLOBALS['db']->query($sql))
+                {
+                    return $GLOBALS['db']->errorMsg();
+                }
+            }
+        }
+
+        /* 如果有红包，发送邮件 */
+        if ($count > 0)
+        {
+            $tpl = get_mail_template('send_bonus');
+            $GLOBALS['smarty']->assign('user_name', $user['user_name']);
+            $GLOBALS['smarty']->assign('count', $count);
+            $GLOBALS['smarty']->assign('money', $money);
+            $GLOBALS['smarty']->assign('shop_name', $GLOBALS['_CFG']['shop_name']);
+            $GLOBALS['smarty']->assign('send_date', local_date($GLOBALS['_CFG']['date_format']));
+            $GLOBALS['smarty']->assign('sent_date', local_date($GLOBALS['_CFG']['date_format']));
+            $content = $GLOBALS['smarty']->fetch('str:' . $tpl['template_content']);
+            send_mail($user['user_name'], $user['email'], $tpl['template_subject'], $content, $tpl['is_html']);
+        }
+    }
+
+    return true;
+}
 
 /**
  * 返回订单发放的红包
@@ -3065,6 +3119,47 @@ function order_bonus($order_id)
     $sql = "SELECT add_time " .
             " FROM " . $GLOBALS['ecs']->table('order_info') .
             " WHERE order_id = '$order_id' LIMIT 1";
+    $order_time = $GLOBALS['db']->getOne($sql);
+
+    /* 查询按订单发的红包 */
+    $sql = "SELECT type_id, type_money, IFNULL(FLOOR('$amount' / min_amount), 1) AS number " .
+            "FROM " . $GLOBALS['ecs']->table('bonus_type') .
+            "WHERE send_type = '" . SEND_BY_ORDER . "' " .
+            "AND send_start_date <= '$order_time' " .
+            "AND send_end_date >= '$order_time' ";
+    $list = array_merge($list, $GLOBALS['db']->getAll($sql));
+
+    return $list;
+}
+function order_bonus2($order_sn)
+{
+    /* 查询按商品发的红包 */
+    $day    = getdate();
+    $today  = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
+
+    $sql = "SELECT b.type_id, b.type_money, SUM(sog.goods_number) AS number " .
+            "FROM (SELECT og.goods_id,og.goods_number,og.is_gift 
+                     FROM ecs_order_info o,ecs_order_goods og 
+                    WHERE o.order_id = og.order_id AND o.order_sn LIKE '$order_sn%' GROUP BY og.goods_id
+                  ) sog," .
+                  $GLOBALS['ecs']->table('goods') . " AS g, " .
+                  $GLOBALS['ecs']->table('bonus_type') . " AS b " .
+            " WHERE sog.is_gift = 0 " .
+            " AND sog.goods_id = g.goods_id " .
+            " AND g.bonus_type_id = b.type_id " .
+            " AND b.send_type = '" . SEND_BY_GOODS . "' " .
+            " AND b.send_start_date <= '$today' " .
+            " AND b.send_end_date >= '$today' " .
+            " GROUP BY b.type_id ";
+    $list = $GLOBALS['db']->getAll($sql);
+
+    /* 查询定单中非赠品总金额 */
+    $amount = 0;//order_amount($order_id, false);
+
+    /* 查询订单日期 */
+    $sql = "SELECT add_time " .
+            " FROM " . $GLOBALS['ecs']->table('order_info') .
+            " WHERE order_sn = '$order_sn' LIMIT 1";
     $order_time = $GLOBALS['db']->getOne($sql);
 
     /* 查询按订单发的红包 */

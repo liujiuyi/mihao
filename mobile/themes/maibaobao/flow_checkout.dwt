@@ -28,7 +28,7 @@
           <ul class="ect-radio">
             <!-- {foreach from=$shipping_list item=shipping} 循环配送方式 -->
             <li>
-              <input name="shipping" type="radio" id="shipping_{$shipping.shipping_id}" value="{$shipping.shipping_id}"  {if $shipping.shipping_disabled}disabled{/if} supportCod="{$shipping.support_cod}" insure="{$shipping.insure}" onclick="selectShipping(this)">
+              <input name="shipping" type="radio" id="shipping_{$shipping.shipping_id}" value="{$shipping.shipping_id}"  {if $shipping.shipping_disabled}disabled{else if $order.shipping_id eq $shipping.shipping_id}checked="true"{/if} supportCod="{$shipping.support_cod}" insure="{$shipping.insure}" onclick="selectShipping(this)">
               <label for="shipping_{$shipping.shipping_id}">{$shipping.shipping_name}[{$shipping.shipping_desc}]<i></i></label>
             </li>
             <!-- {/foreach} 循环配送方式 -->
@@ -45,7 +45,7 @@
           <ul class="ect-radio">
             <!-- {foreach from=$distribution_list item=distribution} 循环配送方式 -->
             <li>
-              <input name="distribution" type="radio" id="distribution_{$distribution.distribution_id}" value="{$distribution.distribution_id}">
+              <input name="distribution" type="radio" id="distribution_{$distribution.distribution_id}" value="{$distribution.distribution_id}" {if $order.distribution_id eq $distribution.distribution_id}checked="true"{/if}>
               <label for="distribution_{$distribution.distribution_id}">{$distribution.distribution_name}<i></i></label>
             </li>
             <!-- {/foreach} 循环配送方式 -->
@@ -64,12 +64,14 @@
           <script src="__TPL__/pickadate/picker.js"></script>
           <script src="__TPL__/pickadate/picker.date.js"></script>
           <script type="text/javascript">
-          var year = (new Date()).getFullYear();
-          var month = (new Date()).getMonth();
-          var date = (new Date()).getDate() + (14 - (new Date()).getDay() + 1);
-          var week = new Date().getDay();
-          if(week > 0 && week < 6){
-            date = (new Date()).getDate() + (7 - (new Date()).getDay() + 1);
+          var full_date = new Date();
+          var year = full_date.getFullYear();
+          var month = full_date.getMonth();
+          var week = full_date.getDay();
+          if(week >= 0 && week < 6){
+            date = full_date.getDate() + (7 - full_date.getDay() + 1);
+          } else {
+            date = full_date.getDate() + (14 - full_date.getDay() + 1);
           }
               var $input = $( '.datepicker' ).pickadate({
                   min: [year, month, date],

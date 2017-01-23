@@ -57,7 +57,7 @@
                                 {if $order.order_amount gt 0}
                                 <section class="ect-padding-lr ect-padding-tb ect-margin-tb ect-margin-bottom0">{$order.pay_online}</section>
                                 {/if}
-                                <div class="clearfix modTop">
+                                <div hidden class="clearfix modTop">
                                     {$order.handler} 
                                 </div>
                             </div>

@@ -240,6 +240,46 @@ class OrderModel extends BaseModel {
 
         return $list;
     }
+    function order_bonus2($order_sn) {
+        /* 查询按商品发的红包 */
+        $day = getdate();
+        $today = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
+
+        $sql = "SELECT b.type_id, b.type_money, SUM(sog.goods_number) AS number " .
+                "FROM (SELECT og.goods_id,og.goods_number,og.is_gift 
+                         FROM " . $this->pre . "order_info AS o," . $this->pre . "order_goods og 
+                        WHERE o.order_id = og.order_id AND o.order_sn LIKE '$order_sn%' GROUP BY og.goods_id
+                      ) sog," .
+                $this->pre . "goods AS g, " .
+                $this->pre . "bonus_type AS b " .
+                " WHERE sog.is_gift = 0 " .
+                " AND sog.goods_id = g.goods_id " .
+                " AND g.bonus_type_id = b.type_id " .
+                " AND b.send_type = '" . SEND_BY_GOODS . "' " .
+                " AND b.send_start_date <= '$today' " .
+                " AND b.send_end_date >= '$today' " .
+                " GROUP BY b.type_id ";
+        $list = $this->query($sql);
+
+        /* 查询订单中非赠品总金额 */
+        $amount = 0;//$this->order_amount($order_id, false);
+
+        /* 查询订单日期 */
+        $sql = "SELECT add_time " .
+                " FROM " . $this->pre .
+                "order_info WHERE order_sn = '$order_sn' LIMIT 1";
+        $res = $this->row($sql);
+        $order_time = $res['add_time'];
+        /* 查询按订单发的红包 */
+        $sql = "SELECT type_id, type_money, IFNULL(FLOOR('$amount' / min_amount), 1) AS number " .
+                "FROM " . $this->pre .
+                "bonus_type WHERE send_type = '" . SEND_BY_ORDER . "' " .
+                "AND send_start_date <= '$order_time' " .
+                "AND send_end_date >= '$order_time' ";
+        $list = array_merge($list, $this->query($sql));
+
+        return $list;
+    }
 
     /**
      * 取得订单总金额
@@ -1119,15 +1159,16 @@ class OrderModel extends BaseModel {
      * @return  void
      */
     function last_shipping_and_payment() {
-        $sql = "SELECT shipping_id, pay_id " .
+        $sql = "SELECT shipping_id, pay_id, distribution_id " .
                 " FROM " . $this->pre .
                 "order_info WHERE user_id = '$_SESSION[user_id]' " .
                 " ORDER BY order_id DESC LIMIT 1";
+        
         $row = $this->row($sql);
 
         if (empty($row)) {
             /* 如果获得是一个空数组，则返回默认值 */
-            $row = array('shipping_id' => 0, 'pay_id' => 0);
+            $row = array('shipping_id' => 0, 'pay_id' => 0, 'distribution_id' => 0);
         }
 
         return $row;
@@ -1221,12 +1262,18 @@ class OrderModel extends BaseModel {
                 if (!isset($order['pay_id'])) {
                     $order['pay_id'] = $arr['pay_id'];
                 }
+                if (!isset($order['distribution_id'])) {
+                    $order['distribution_id'] = $arr['distribution_id'];
+                }
             } else {
                 if (!isset($order['shipping_id'])) {
                     $order['shipping_id'] = 0;
                 }
                 if (!isset($order['pay_id'])) {
                     $order['pay_id'] = 0;
+                }
+                if (!isset($order['distribution_id'])) {
+                    $order['distribution_id'] = 0;
                 }
             }
         }
@@ -1746,6 +1793,53 @@ class OrderModel extends BaseModel {
 
         return true;
     }
+    function send_order_bonus2($order_sn) {
+        /* 取得订单应该发放的红包 */
+        $bonus_list = model('Order')->order_bonus2($order_sn);
+
+        /* 如果有红包，统计并发送 */
+        if ($bonus_list) {
+            /* 用户信息 */
+            $sql = "SELECT u.user_id, u.user_name, u.email " .
+                    "FROM " . $this->pre . "order_info AS o, " .
+                    $this->pre . "users AS u " .
+                    "WHERE o.order_sn = '$order_sn' " .
+                    "AND o.user_id = u.user_id ";
+            $user = $this->row($sql);
+
+            /* 统计 */
+            $count = 0;
+            $money = '';
+            foreach ($bonus_list AS $bonus) {
+                $count += $bonus['number'];
+                $money .= price_format($bonus['type_money']) . ' [' . $bonus['number'] . '], ';
+
+                /* 修改用户红包 */
+                $sql = "INSERT INTO " . $this->pre . "user_bonus (bonus_type_id, user_id) " .
+                        "VALUES('$bonus[type_id]', '$user[user_id]')";
+                for ($i = 0; $i < $bonus['number']; $i++) {
+                    if (!$this->query($sql)) {
+                        return M()->errorMsg();
+                    }
+                }
+            }
+
+            /* 如果有红包，发送邮件 */
+            if ($count > 0) {
+                $tpl = model('Base')->get_mail_template('send_bonus');
+                ECTouch::view()->assign('user_name', $user['user_name']);
+                ECTouch::view()->assign('count', $count);
+                ECTouch::view()->assign('money', $money);
+                ECTouch::view()->assign('shop_name', C('shop_name'));
+                ECTouch::view()->assign('send_date', local_date(C('date_format')));
+                ECTouch::view()->assign('sent_date', local_date(C('date_format')));
+                $content = ECTouch::view()->fetch('str:' . $tpl['template_content']);
+                send_mail($user['user_name'], $user['email'], $tpl['template_subject'], $content, $tpl['is_html']);
+            }
+        }
+
+        return true;
+    }
 
     /**
      * 返回订单发放的红包
@@ -2020,4 +2114,85 @@ class OrderModel extends BaseModel {
         return $arr[0]['goods_thumb'];
     }
 
+    /**
+     * 计算订单的配送日期
+     * @param $start_date, $number, $week
+     * @return date
+     */
+    function get_order_shipping_date($start_date, $number, $week) {
+      $start_date = local_date(C('date_format'), $start_date);
+      $time  = strtotime($start_date);
+      $w     = date('w', $time);
+      if($w == 1){
+       $nextMonday = 0;
+      } else if($w == 0){
+       $nextMonday = 1;
+      } else {
+       $nextMonday = 7 - $w + 1;
+      }
+      $nextMonday = $nextMonday + ($number - 1) * 7 + $week - 1;
+	
+      return date('Y-m-d', $time + 3600*24*$nextMonday);
+    }
+
+    /**
+     * 更新订单配送日期
+     * @param   $order_id, $shipping_date
+     */
+    function change_order_shipping_date($order_id, $shipping_date) {
+        $sql = "UPDATE " . $this->pre . "order_info SET shipping_date = '$shipping_date' WHERE order_id = '$order_id'";
+
+        $this->query($sql);
+    }
+
+    /**
+     * 创建新订单
+     * @param   $old_order_id, $order_shipping_date, $goods_ids
+     * @return  $new_order_id
+     */
+    function create_order($old_order, $order_shipping_date, $goods_ids) {
+     // 开始创建新订单
+     /* 插入订单 */
+     $error_no = 0;
+     do {
+      /* 获取新订单号 */
+      $old_order_sn = $old_order ['order_sn'];
+      $order_number = $this->row ( "SELECT count(*) number FROM " . $this->pre . "order_info WHERE order_sn LIKE '$old_order_sn%'" )['number'];
+      $order_sn = $old_order_sn . "-" . $order_number;
+      $sql = "INSERT INTO " . $this->pre . "order_info (
+                  `order_sn`,`user_id`,`order_status`,`shipping_status`,`pay_status`,`consignee`,`country`,`province`,`city`,
+                  `district`,`address`,`zipcode`,`tel`,`mobile`,`email`,`best_time`,`sign_building`,`postscript`,`shipping_id`,`shipping_name`,
+                  `distribution_id`,`distribution_name`,`pay_id`,`pay_name`,`how_oos`,`how_surplus`,`pack_name`,`card_name`,`card_message`,
+                  `inv_payee`,`inv_content`,`goods_amount`,`shipping_fee`,`insure_fee`,`pay_fee`,`pack_fee`,`card_fee`,`money_paid`,`surplus`,
+                  `integral`,`integral_money`,`bonus`,`order_amount`,`from_ad`,`referer`,`add_time`,`confirm_time`,`pay_time`,`shipping_time`,
+                  `pack_id`,`card_id`,`bonus_id`,`invoice_no`,`extension_code`,`extension_id`,`to_buyer`,`pay_note`,`agency_id`,`inv_type`,`tax`,
+                  `is_separate`,`parent_id`,`discount`,`mobile_pay`,`is_single`,`mobile_order`,`shipping_date`
+                 ) SELECT '$order_sn',`user_id`,`order_status`,`shipping_status`,`pay_status`,`consignee`,`country`,`province`,`city`,
+                  `district`,`address`,`zipcode`,`tel`,`mobile`,`email`,`best_time`,`sign_building`,`postscript`,`shipping_id`,`shipping_name`,
+                  `distribution_id`,`distribution_name`,`pay_id`,`pay_name`,`how_oos`,`how_surplus`,`pack_name`,`card_name`,`card_message`,
+                  `inv_payee`,`inv_content`,'0','0','0','0','0','0','0',`surplus`,
+                  `integral`,`integral_money`,'0','0',`from_ad`,`referer`,`add_time`,`confirm_time`,`pay_time`,`shipping_time`,
+                  `pack_id`,`card_id`,`bonus_id`,`invoice_no`,`extension_code`,`extension_id`,`to_buyer`,`pay_note`,`agency_id`,`inv_type`,`tax`,
+                  `is_separate`,`parent_id`,`discount`,`mobile_pay`,`is_single`,`mobile_order`,'$order_shipping_date'
+                  FROM " . $this->pre . "order_info  WHERE order_id = '" . $old_order ['order_id'] . "'";
+      
+
+      $this->query ( $sql );
+      $error_no = M ()->errno ();
+     } while ( $error_no == 1062 ); // 如果是订单号重复则重新提交数据
+     /* 新订单ID */
+     $new_order_id = M ()->insert_id ();
+     /* 拆分原订单内的商品ID */
+     foreach ( $goods_ids as $goods_id ) {
+      /* 插入订单商品 */
+      $sql = "INSERT INTO " . $this->pre . "order_goods (`order_id`,`goods_id`,`goods_name`,`goods_sn`,`product_id`,`goods_number`,`market_price`,
+                  `goods_price`,`goods_attr`,`send_number`,`is_real`,`extension_code`,`parent_id`,`is_gift`,`goods_attr_id`,`is_single`
+                 ) SELECT " . $new_order_id . ",`goods_id`,`goods_name`,`goods_sn`,`product_id`,`goods_number`,`market_price`, `goods_price`,`goods_attr`,
+                  `send_number`,`is_real`,`extension_code`,`parent_id`,`is_gift`,`goods_attr_id`,`is_single`
+                   FROM " . $this->pre . "order_goods  WHERE goods_id = " . $goods_id['goods_id'] . " and order_id = '" . $old_order ['order_id'] . "'";
+
+      $this->query ( $sql );
+     }
+     return $new_order_id;
+    }
 }

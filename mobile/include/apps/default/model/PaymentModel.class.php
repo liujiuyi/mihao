@@ -149,9 +149,21 @@ class PaymentModel extends BaseModel {
                             " order_amount = 0 " .
                             "WHERE order_id = '$order_id'";
                     $this->query($sql);
+                    /* 修改子订单状态为已付款 */
+                    $sql = 'UPDATE ' . $this->pre .
+                            "order_info SET order_status = '" . OS_CONFIRMED . "', " .
+                            " confirm_time = '" . gmtime() . "', " .
+                            " pay_status = '$pay_status', " .
+                            " pay_time = '" . gmtime() . "'" .
+                            "WHERE order_sn like '$order_sn%'";
+                    $this->query($sql);
 
                     /* 记录订单操作记录 */
                     model('OrderBase')->order_action($order_sn, OS_CONFIRMED, SS_UNSHIPPED, $pay_status, $note, L('buyer'));
+                    
+                    /* 发放红包 */
+                    model('Order')->send_order_bonus2($order_sn);
+                    
 
                     /* 如果需要，发短信 */
                     if (C('sms_order_payed') == '1' && C('sms_shop_mobile') != '') {

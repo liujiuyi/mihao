@@ -1436,6 +1436,141 @@ class FlowController extends CommonController {
         $this->assign('step', ACTION_NAME);
 
         $this->assign('title', L('order_submit'));
+        
+        /* 进行分单处理*/
+        //检索商品及分类
+        $sql = "SELECT DISTINCT g.cat_id FROM " . $this->model->pre . "order_goods og, " . $this->model->pre . "goods g WHERE og.goods_id = g.goods_id AND og.order_id = " . $order ['order_id'];
+        $order_goods_cat_array = $this->model->query($sql);
+        //1	 精选鲜蔬-生态精选鲜蔬	
+        //2	 生态鲜肉-生态散养鲜肉	
+        //3	 土 家鲜蛋-生态散养鸡蛋，配送四次		
+        //4	 自然甄选-生态精选食材	
+        //6	 小农雪花猪		
+        //7	 小农黑猪		
+        //9	 鸡			
+        //10 半月蔬菜套餐，配送四次		
+        //11 整月蔬菜套餐，配送八次
+        if(count($order_goods_cat_array) > 1){
+         //多种分类处理
+         //最多配送八次
+         $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 1);
+         $order_shipping_date_2 = model('Order')->get_order_shipping_date($order['best_time'], 1, 4);
+         $order_shipping_date_3 = model('Order')->get_order_shipping_date($order['best_time'], 2, 1);
+         $order_shipping_date_4 = model('Order')->get_order_shipping_date($order['best_time'], 2, 4);
+         $order_shipping_date_5 = model('Order')->get_order_shipping_date($order['best_time'], 3, 1);
+         $order_shipping_date_6 = model('Order')->get_order_shipping_date($order['best_time'], 3, 4);
+         $order_shipping_date_7 = model('Order')->get_order_shipping_date($order['best_time'], 4, 1);
+         $order_shipping_date_8 = model('Order')->get_order_shipping_date($order['best_time'], 4, 4);
+         //更改主订单的配送日期
+         $order_id = $order ['order_id'];
+         model('Order')->change_order_shipping_date($order_id, $order_shipping_date_1);
+         //生产新订单
+         $sql = "SELECT goods_id FROM " . $this->model->pre . "order_goods  WHERE order_id = " . $order_id;
+         $goods_ids = $this->model->query($sql);
+         $new_order_id_2 = model('Order')->create_order($order, $order_shipping_date_2, $goods_ids);
+         $new_order_id_3 = model('Order')->create_order($order, $order_shipping_date_3, $goods_ids);
+         $new_order_id_4 = model('Order')->create_order($order, $order_shipping_date_4, $goods_ids);
+         $new_order_id_5 = model('Order')->create_order($order, $order_shipping_date_5, $goods_ids);
+         $new_order_id_6 = model('Order')->create_order($order, $order_shipping_date_6, $goods_ids);
+         $new_order_id_7 = model('Order')->create_order($order, $order_shipping_date_7, $goods_ids);
+         $new_order_id_8 = model('Order')->create_order($order, $order_shipping_date_8, $goods_ids);
+         
+         //清理订单不是该配送日期的物品
+         //清理除了后二四六八订单的鸡蛋
+         $sql = "DELETE FROM " . $this->model->pre . "order_goods 
+                  WHERE (order_id = '$new_order_id_2' OR order_id = '$new_order_id_4' OR order_id = '$new_order_id_6' OR order_id = '$new_order_id_8') 
+                    AND goods_id IN (SELECT g.goods_id FROM " . $this->model->pre . "goods g," . $this->model->pre . "category c WHERE g.cat_id = c.cat_id AND (c.parent_id = 3 or c.cat_id = 3))";
+         
+         $this->model->query($sql);
+         //清理后四订单的半月菜
+         $sql = "DELETE FROM " . $this->model->pre . "order_goods 
+                  WHERE (order_id = '$new_order_id_5' OR order_id = '$new_order_id_6' OR order_id = '$new_order_id_7' OR order_id = '$new_order_id_8') 
+                    AND goods_id IN (SELECT g.goods_id FROM " . $this->model->pre . "goods g," . $this->model->pre . "category c WHERE g.cat_id = c.cat_id AND (c.parent_id = 10 or c.cat_id = 10))";
+         
+         $this->model->query($sql);
+         //清理除了第一个周四以外订单的肉
+         $sql = "DELETE FROM " . $this->model->pre . "order_goods 
+                  WHERE (order_id = '$order_id' OR order_id = '$new_order_id_3' OR order_id = '$new_order_id_4' 
+                     OR order_id = '$new_order_id_5' OR order_id = '$new_order_id_6' OR order_id = '$new_order_id_7' OR order_id = '$new_order_id_8') 
+                    AND goods_id IN (SELECT g.goods_id FROM " . $this->model->pre . "goods g," . $this->model->pre . "category c WHERE g.cat_id = c.cat_id AND (c.parent_id = 2 or c.cat_id = 2))";
+
+         $this->model->query($sql);
+         //清理除了第一个周一以外订单的大米及其它
+         $sql = "DELETE FROM " . $this->model->pre . "order_goods 
+                  WHERE (order_id = '$new_order_id_2' OR order_id = '$new_order_id_3' OR order_id = '$new_order_id_4' 
+                     OR order_id = '$new_order_id_5' OR order_id = '$new_order_id_6' OR order_id = '$new_order_id_7' OR order_id = '$new_order_id_8') 
+                    AND goods_id IN (SELECT g.goods_id FROM " . $this->model->pre . "goods g," . $this->model->pre . "category c WHERE g.cat_id = c.cat_id AND (c.parent_id = 4 or c.cat_id = 4))";
+
+         $this->model->query($sql);
+         
+         //清理没有商品的订单
+         $sql = "DELETE FROM " . $this->model->pre . "order_info 
+                  WHERE not exists(
+                         SELECT 1 FROM " . $this->model->pre . "order_goods 
+                          WHERE " . $this->model->pre . "order_info.order_id = " . $this->model->pre . "order_goods.order_id
+                                  )";
+         
+         $this->model->query($sql);
+        } else {
+          //单一分类处理
+          $cat_id = $order_goods_cat_array[0]['cat_id'];
+          if($cat_id == 10){
+           $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 1); 
+           $order_shipping_date_2 = model('Order')->get_order_shipping_date($order['best_time'], 1, 4);
+           $order_shipping_date_3 = model('Order')->get_order_shipping_date($order['best_time'], 2, 1); 
+           $order_shipping_date_4 = model('Order')->get_order_shipping_date($order['best_time'], 2, 4);  
+           //更改主订单的配送日期
+           model('Order')->change_order_shipping_date($order ['order_id'], $order_shipping_date_1);
+           //生产新订单
+           $sql = "SELECT goods_id FROM " . $this->model->pre . "order_goods  WHERE order_id = " . $order ['order_id'];
+           $goods_ids = $this->model->query($sql);
+           model('Order')->create_order($order, $order_shipping_date_2, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_3, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_4, $goods_ids);
+          } else if($cat_id == 11){
+           $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 1); 
+           $order_shipping_date_2 = model('Order')->get_order_shipping_date($order['best_time'], 1, 4);
+           $order_shipping_date_3 = model('Order')->get_order_shipping_date($order['best_time'], 2, 1); 
+           $order_shipping_date_4 = model('Order')->get_order_shipping_date($order['best_time'], 2, 4);  
+           $order_shipping_date_5 = model('Order')->get_order_shipping_date($order['best_time'], 3, 1); 
+           $order_shipping_date_6 = model('Order')->get_order_shipping_date($order['best_time'], 3, 4);
+           $order_shipping_date_7 = model('Order')->get_order_shipping_date($order['best_time'], 4, 1); 
+           $order_shipping_date_8 = model('Order')->get_order_shipping_date($order['best_time'], 4, 4); 
+           //更改主订单的配送日期
+           model('Order')->change_order_shipping_date($order ['order_id'], $order_shipping_date_1);
+           //生产新订单
+           $sql = "SELECT goods_id FROM " . $this->model->pre . "order_goods  WHERE order_id = " . $order ['order_id'];
+           $goods_ids = $this->model->query($sql);
+           model('Order')->create_order($order, $order_shipping_date_2, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_3, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_4, $goods_ids); 
+           model('Order')->create_order($order, $order_shipping_date_5, $goods_ids); 
+           model('Order')->create_order($order, $order_shipping_date_6, $goods_ids); 
+           model('Order')->create_order($order, $order_shipping_date_7, $goods_ids); 
+           model('Order')->create_order($order, $order_shipping_date_8, $goods_ids); 
+          } else if($cat_id == 3){
+           $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 1); 
+           $order_shipping_date_2 = model('Order')->get_order_shipping_date($order['best_time'], 2, 1); 
+           $order_shipping_date_3 = model('Order')->get_order_shipping_date($order['best_time'], 3, 1); 
+           $order_shipping_date_4 = model('Order')->get_order_shipping_date($order['best_time'], 4, 1); 
+           //更改主订单的配送日期
+           model('Order')->change_order_shipping_date($order ['order_id'], $order_shipping_date_1);
+           //生产新订单
+           $sql = "SELECT goods_id FROM " . $this->model->pre . "order_goods  WHERE order_id = " . $order ['order_id'];
+           $goods_ids = $this->model->query($sql);
+           model('Order')->create_order($order, $order_shipping_date_2, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_3, $goods_ids);
+           model('Order')->create_order($order, $order_shipping_date_4, $goods_ids); 
+          } else if($cat_id == 2 || $cat_id == 6 || $cat_id == 7 || $cat_id == 9){
+           $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 4);
+           //更改主订单的配送日期
+           model('Order')->change_order_shipping_date($order ['order_id'], $order_shipping_date_1);
+          } else if($cat_id == 4){
+           $order_shipping_date_1 = model('Order')->get_order_shipping_date($order['best_time'], 1, 1);
+           //更改主订单的配送日期
+           model('Order')->change_order_shipping_date($order ['order_id'], $order_shipping_date_1);
+          }
+        }
 
         $this->display('flow.dwt');
     }
